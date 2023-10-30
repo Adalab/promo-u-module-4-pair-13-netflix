@@ -66,5 +66,42 @@ DELETE FROM users WHERE name LIKE "M%";
 ALTER TABLE actors ADD image VARCHAR(100);
 ALTER TABLE actors DROP COLUMN image;
 
+-- DAY 3
 
+USE netflix;
 
+CREATE TABLE rel_movies_users(
+id INT auto_increment primary KEY,
+fk_users INT, 
+fk_movies INT, 
+FOREIGN KEY(fk_users) REFERENCES users(idUser),
+FOREIGN KEY(fk_movies) REFERENCES movies(idMovies)
+);
+
+CREATE TABLE rel_movies_actors(
+id INT auto_increment primary KEY,
+fk_actors INT, 
+fk_movies INT, 
+FOREIGN KEY(fk_actors) REFERENCES actors(idActor),
+FOREIGN KEY(fk_movies) REFERENCES movies(idMovies)
+);
+
+INSERT INTO rel_movies_users (fk_users, fk_movies)
+VALUES (1, 1), (1, 2), (3, 2);
+
+INSERT INTO rel_movies_actors (fk_actors, fk_movies)
+VALUES (9,1), (7,3), (8,2);
+
+ALTER TABLE rel_movies_users ADD score float;
+
+UPDATE rel_movies_users
+SET score = 5
+WHERE id=4;
+
+UPDATE rel_movies_users
+SET score = 8
+WHERE id=5;
+
+UPDATE rel_movies_users
+SET score = 2.7
+WHERE id=6;

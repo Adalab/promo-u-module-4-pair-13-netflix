@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.34, for Linux (x86_64)
 --
--- Host: localhost    Database: netflix
+-- Host: 127.0.0.1    Database: netflix
 -- ------------------------------------------------------
 -- Server version	8.0.34-0ubuntu0.22.04.1
 
@@ -71,6 +71,65 @@ INSERT INTO `movies` VALUES (1,'Pulp Fiction','Crimen','https://pics.filmaffinit
 UNLOCK TABLES;
 
 --
+-- Table structure for table `rel_movies_actors`
+--
+
+DROP TABLE IF EXISTS `rel_movies_actors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rel_movies_actors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `fk_actors` int DEFAULT NULL,
+  `fk_movies` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_actors` (`fk_actors`),
+  KEY `fk_movies` (`fk_movies`),
+  CONSTRAINT `rel_movies_actors_ibfk_1` FOREIGN KEY (`fk_actors`) REFERENCES `actors` (`idActor`),
+  CONSTRAINT `rel_movies_actors_ibfk_2` FOREIGN KEY (`fk_movies`) REFERENCES `movies` (`idMovies`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rel_movies_actors`
+--
+
+LOCK TABLES `rel_movies_actors` WRITE;
+/*!40000 ALTER TABLE `rel_movies_actors` DISABLE KEYS */;
+INSERT INTO `rel_movies_actors` VALUES (1,9,1),(2,7,3),(3,8,2);
+/*!40000 ALTER TABLE `rel_movies_actors` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rel_movies_users`
+--
+
+DROP TABLE IF EXISTS `rel_movies_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rel_movies_users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `fk_users` int DEFAULT NULL,
+  `fk_movies` int DEFAULT NULL,
+  `score` float DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_users` (`fk_users`),
+  KEY `fk_movies` (`fk_movies`),
+  CONSTRAINT `rel_movies_users_ibfk_1` FOREIGN KEY (`fk_users`) REFERENCES `users` (`idUser`),
+  CONSTRAINT `rel_movies_users_ibfk_2` FOREIGN KEY (`fk_movies`) REFERENCES `movies` (`idMovies`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rel_movies_users`
+--
+
+LOCK TABLES `rel_movies_users` WRITE;
+/*!40000 ALTER TABLE `rel_movies_users` DISABLE KEYS */;
+INSERT INTO `rel_movies_users` VALUES (4,1,1,5),(5,1,2,8),(6,3,2,2.7);
+/*!40000 ALTER TABLE `rel_movies_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -107,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-30  9:28:13
+-- Dump completed on 2023-10-30 11:29:32
