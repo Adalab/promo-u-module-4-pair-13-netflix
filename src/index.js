@@ -19,7 +19,7 @@ async function getConnection() {
     host: 'sql.freedb.tech',
     user: 'freedb_IreMa',
     password: '3e7xcC4*uxS7p7d',
-    database: 'freedb_NetflixPair',
+    database: 'freedb_NeflixPair',
   });
   await connection.connect();
 
