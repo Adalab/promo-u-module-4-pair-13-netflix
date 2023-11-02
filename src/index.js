@@ -47,3 +47,7 @@ server.get('/movies', async (req, res) => {
   //terminar conexión
   connection.end();
 });
+
+//servidor de estáticos
+const staticServerPathWeb = './src/public-react';
+server.use(express.static(staticServerPathWeb));
