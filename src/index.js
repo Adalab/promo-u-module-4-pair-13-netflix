@@ -18,7 +18,7 @@ async function getConnection() {
   const connection = await mysql.createConnection({
     host: 'sql.freedb.tech',
     user: 'freedb_IreMa',
-    password: '3e7xcC4*uxS7p7d',
+    password: 'n#QccEv3#c3MM*F', //3e7xcC4*uxS7p7d
     database: 'freedb_NeflixPair',
   });
   await connection.connect();
@@ -32,10 +32,19 @@ async function getConnection() {
 
 //endpoint para todas recibir datos pelis
 server.get('/movies', async (req, res) => {
+  const genreFilterParam = req.query.genre;
+  const sortParam = req.query.sort;
+  console.log(genreFilterParam);
   //establecer conexión
   const connection = await getConnection();
   //crear consulta
-  let query = 'SELECT * FROM movies';
+  let query = '';
+  if (genreFilterParam === '') {
+    query = `SELECT * FROM movies order by title ${sortParam}`;
+  } else {
+    query = `SELECT * FROM movies WHERE genre = "${genreFilterParam}" order by title ${sortParam}`;
+  }
+
   const [results, fields] = await connection.query(query);
 
   //responder a la petición
