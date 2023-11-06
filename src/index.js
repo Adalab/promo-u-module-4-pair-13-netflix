@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
+require('dotenv').config();
+
+console.log('Entorno:', process.env);
 
 // create and config server
 const server = express();
@@ -16,10 +19,10 @@ server.listen(serverPort, () => {
 //INIT CONNECTION TO DB
 async function getConnection() {
   const connection = await mysql.createConnection({
-    host: 'sql.freedb.tech',
-    user: 'freedb_IreMa',
-    password: 'n#QccEv3#c3MM*F',
-    database: 'freedb_NeflixPair',
+    host: process.env.HOST,
+    user: process.env.DBUSER,
+    password: process.env.PASS,
+    database: process.env.DATABASE,
   });
   await connection.connect();
 
@@ -33,10 +36,9 @@ async function getConnection() {
 //PETICIONES CON PARÁMETROS
 //endpoint para todas recibir datos pelis
 server.get('/movies', async (req, res) => {
-  console.log(req.query);
   const genreFilterParam = req.query.genre;
   const sortParam = req.query.sort;
-  console.log(genreFilterParam);
+
   //establecer conexión
   const connection = await getConnection();
   //crear consulta
@@ -44,14 +46,10 @@ server.get('/movies', async (req, res) => {
   let movies = [];
   if (genreFilterParam === '') {
     query = `SELECT * FROM movies order by title ${sortParam}`;
-    // query = `SELECT * FROM movies order by title desc`;
-    console.log(query);
     const [results, fields] = await connection.query(query);
     movies = results;
   } else {
     query = `SELECT * FROM movies WHERE genre = ? order by title ${sortParam}`;
-    console.log(query);
-
     const [results, fields] = await connection.query(query, [genreFilterParam]);
     movies = results;
   }
@@ -71,7 +69,6 @@ server.get('/movies', async (req, res) => {
 server.get('/movie/:movieId', (req, res) => {
   console.log(req.params);
   const foundMovie = req.params.movieId;
-
 });
 
 //servidor de estáticos
