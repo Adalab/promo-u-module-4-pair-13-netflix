@@ -3,12 +3,13 @@ const cors = require('cors');
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-console.log('Entorno:', process.env);
-
 // create and config server
 const server = express();
 server.use(cors());
 server.use(express.json());
+
+//motor plantillas
+server.set('view engine', 'ejs');
 
 // init express aplication
 const serverPort = 4000;
@@ -66,11 +67,25 @@ server.get('/movies', async (req, res) => {
 
 //MOTOR DE PLANTILLAS
 //endpoint para escuchar peticiones del detalle de una peli
-server.get('/movie/:movieId', (req, res) => {
-  console.log(req.params);
-  const foundMovie = req.params.movieId;
+server.get('/detail/:movieId', async (req, res) => {
+  const connection = await getConnection();
+  const idFound = req.params.movieId;
+  query = `SELECT * FROM movies WHERE idMovies = ?`;
+  const [results, fields] = await connection.query(query, [idFound]);
+  const foundMovie = results[0];
+  console.log(results);
+
+  /*   res.json({
+    success: true,
+    movie: foundMovie,
+  }); */
+  res.render('movie', { movie: results[0] });
+  connection.end();
 });
 
 //servidor de estáticos
 const staticServerPathWeb = './src/public-react';
 server.use(express.static(staticServerPathWeb));
+
+const staticServerCss = './src/public-css';
+server.use(express.static(staticServerCss));
