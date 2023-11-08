@@ -83,6 +83,59 @@ server.get('/detail/:movieId', async (req, res) => {
   connection.end();
 });
 
+//endpoint para login
+server.post('/login', async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  //establecer conexión
+  const connection = await getConnection();
+  //crear consulta
+  const query = 'SELECT * FROM users WHERE email = ? AND password = ?;';
+
+  const [results, fields] = await connection.query(query, [email, password]);
+
+  //REVISAR PORQUE NO OBTENEMOS RESPUESTA
+  //responder a la petición
+  if (results.length === 0) {
+    res.json({
+      success: false,
+      errorMessage: 'Usuaria/o no encontrada/o',
+    });
+  } else {
+    res.json({
+      success: true,
+      userId: results[0].idUser,
+    });
+  }
+
+  //terminar conexión
+  connection.end();
+});
+
+//endpoint para registro
+server.post('/sign-up', async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  console.log(email);
+  console.log(password);
+
+  //establecer conexión
+  const connection = await getConnection();
+  //crear consulta
+  const query = 'INSERT INTO users (password, email) VALUES (?,?);';
+
+  const [results, fields] = await connection.query(query, [email, password]);
+  //responder a la petición
+  res.json({
+    success: true,
+    userId: 'nuevo-id-añadido',
+  });
+
+  //terminar conexión
+  connection.end();
+});
+
 //servidor de estáticos
 const staticServerPathWeb = './src/public-react';
 server.use(express.static(staticServerPathWeb));
