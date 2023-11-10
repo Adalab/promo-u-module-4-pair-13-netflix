@@ -95,7 +95,6 @@ server.post('/login', async (req, res) => {
 
   const [results, fields] = await connection.query(query, [email, password]);
 
-  //REVISAR PORQUE NO OBTENEMOS RESPUESTA
   //responder a la petición
   if (results.length === 0) {
     res.json({
