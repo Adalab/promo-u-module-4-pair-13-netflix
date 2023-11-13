@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 // create and config server
+const dbConnect = require('./config/connection'); //mongo
 const server = express();
 server.use(cors());
 server.use(express.json());
@@ -33,6 +34,9 @@ async function getConnection() {
 
   return connection;
 }
+//Conection with MongoDB
+
+dbConnect();
 
 //PETICIONES CON PARÁMETROS
 //endpoint para todas recibir datos pelis
@@ -133,6 +137,25 @@ server.post('/sign-up', async (req, res) => {
 
   //terminar conexión
   connection.end();
+});
+
+//MONGO
+const Products = require('./models/movie.model');
+
+server.get('/movies_all_mongo', async (req, res) => {
+  const sortParam = req.query.sort;
+  try {
+    const result = await Products.find().sort({ title: sortParam});
+    res.json({
+      success: true,
+      movies: result,
+    });
+  } catch (error) {
+    res.status(501).json({
+      success: false,
+      error: error,
+    });
+  }
 });
 
 //servidor de estáticos
